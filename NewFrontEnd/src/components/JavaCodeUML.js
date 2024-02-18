@@ -96,60 +96,69 @@ const JavaCodeUML = () => {
 
 
   return (
-
-    <div className="container-fluid">
-      {/* Left Side */}
-      <div className="row">
-        {/* Left Half */}
-        <div className="col-sm-6">
-          <textarea
-            className="form-control h-100"
-            rows="30"
-            placeholder="Enter Java code here..."
-            value={javaCode}
-            onChange={handleInputChange}
-          />
-          <div className='p-2 d-flex justify-content-center'>
-            <button className="btn btn-primary" onClick={() => { generatePlantUml(); makeApiRequest(); }}>
-              Refresh
-            </button>
-          </div>
+    <>
+      <nav className="navbar navbar-light p-4" style={{ "backgroundColor": "#008000" }}>
+        <div className="container-fluid">
+          <span className="navbar-brand mb-0 h1 text-light">Bing UML</span>
         </div>
-        {/* Right Side */}
-        <div className="col-sm-6">
-          {/* Right Half */}
-          <div className="d-flex flex-column justify-content-between h-100">
-            {/* Top Right: PlantUML Image */}
-            <h3>UML Diagram:</h3>
-            <div className="mb-3 text-center">
+      </nav>
 
-              {plantUmlSvgUrl ? <img className="img-fluid" alt="" src={plantUmlSvgUrl} /> : null}
+      <div className="container-fluid">
+
+        {/* Left Side */}
+        <div className="row">
+          {/* Left Half */}
+          <div className="col-sm-6">
+            <textarea
+              className="form-control h-100"
+              rows="30"
+              placeholder="Enter Java code here..."
+              value={javaCode}
+              onChange={handleInputChange}
+            />
+            <div className='p-2 d-flex justify-content-center'>
+              <button className="btn btn-primary" onClick={() => { generatePlantUml(); makeApiRequest(); }}>
+                Refresh
+              </button>
             </div>
-
-            <hr />
-
-            {/* Bottom Right: Text Summarization */}
-            <h3>Code Summary:</h3>
-
-            <div className='mb-3 text-center'>
-              {response && (
-                <div style={{ whiteSpace: 'pre-line' }}>
-                  <pre>{JSON.stringify(response.choices[0].text.trim(), null, 2).replace(/"/g, '')}</pre>
-                </div>
-              )}
-            </div>
-
           </div>
+          {/* Right Side */}
+          <div className="col-sm-6">
+            {/* Right Half */}
+            <div className="d-flex flex-column justify-content-between h-100">
+              {/* Top Right: PlantUML Image */}
+              <h3>UML Diagram:</h3>
+              <div className="mb-3 text-center">
+
+                {plantUmlSvgUrl ? <img className="img-fluid" alt="" src={plantUmlSvgUrl} /> : null}
+              </div>
+
+              <hr />
+
+              {/* Bottom Right: Text Summarization */}
+              <h3>Code Summary:</h3>
+
+              <div className='mb-3 text-center'>
+                {response && response.choices && response.choices[0] && response.choices[0].text && (
+                  <div style={{ whiteSpace: 'pre-line' }}>
+                    <pre>{JSON.stringify(response.choices[0].text.trim(), null, 2).replace(/"/g, '')}</pre>
+                  </div>
+                )}
+              </div>
+
+
+            </div>
+          </div>
+
+
+          {/* Uncomment the following if you want to display the Java code */}
+          {/* {javaCode && <div>{javaCode}</div>} */}
         </div>
 
 
-        {/* Uncomment the following if you want to display the Java code */}
-        {/* {javaCode && <div>{javaCode}</div>} */}
+
       </div>
-
-
-
-    </div>
+    </>
   );
 
 };

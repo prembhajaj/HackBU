@@ -66,7 +66,7 @@ public class JavaToPlantUML {
         }
     }
 
-    private static class PlantUMLGenerator extends com.github.javaparser.ast.visitor.VoidVisitorAdapter<Void> {
+    public static class PlantUMLGenerator extends com.github.javaparser.ast.visitor.VoidVisitorAdapter<Void> {
         private StringBuilder plantUMLText = new StringBuilder();
         private Map<String, String> relationships = new HashMap<>();
         private String currentClass;

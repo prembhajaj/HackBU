@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 // import jsonToPlantUML from "json-to-plantuml";
 import * as plantumlEncoder from 'plantuml-encoder';
+import "../App.css";
+
 
 const JavaCodeUML = () => {
   const [javaCode, setJavaCode] = useState('');
@@ -97,7 +99,7 @@ const JavaCodeUML = () => {
 
   return (
     <>
-      <nav className="navbar navbar-light p-4" style={{ "backgroundColor": "#008000" }}>
+      <nav className="navbar navbar-light p-4 navbar-expand-lg" style={{ "backgroundColor": "#008000", "fontSize":"300px" }}>
         <div className="container-fluid">
           <span className="navbar-brand mb-0 h1 text-light">Bing UML</span>
         </div>
@@ -123,36 +125,64 @@ const JavaCodeUML = () => {
             </div>
           </div>
           {/* Right Side */}
-          <div className="col-sm-6">
-            {/* Right Half */}
-            <div className="d-flex flex-column justify-content-between h-100">
-              {/* Top Right: PlantUML Image */}
-              <h3>UML Diagram:</h3>
-              <div className="mb-3 text-center">
+          <div className="col-sm-6 border-bottom">
+            <div className="row w-100 h-100">
+              <div className="col-12">
+                <div>
+                  <h3>UML Diagram:</h3>
+                  <div className="text-center">
 
-                {plantUmlSvgUrl ? <img className="img-fluid" alt="" src={plantUmlSvgUrl} /> : null}
+                    {plantUmlSvgUrl ? <img className="img-fluid w-100 h-100 text-center" alt="" src={plantUmlSvgUrl} /> : null}
+                  </div>
+                </div>
+              </div>
+              <div className="col-1 d-flex align-items-center justify-content-center">
+                <hr className="m-0" style={{ height: "100%" }} />
+              </div>
+              <div className="col-12 border-top">
+                <div><h3 className='align-top my-10'>Code Summary:</h3></div>
+
+                <div className='text-start'>
+                  {response && response.choices && response.choices[0] && response.choices[0].text && (
+                    <div style={{ whiteSpace: 'pre-line' }}>
+                      <div>{JSON.stringify(response.choices[0].text.trim(), null, 2).replace(/"/g, '')}</div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/*<div className="col-sm-6">
+            
+            <div className="d-flex flex-column justify-content-between h-100 border-top">
+              
+              <div>
+                <h3>UML Diagram:</h3>
+                <div className="mb-3 text-center">
+
+                  {plantUmlSvgUrl ? <img className="img-fluid" alt="" src={plantUmlSvgUrl} /> : null}
+                </div>
               </div>
 
-              <hr />
+              <div className='border'></div>
 
-              {/* Bottom Right: Text Summarization */}
-              <h3>Code Summary:</h3>
+              
+              <div  style={{ whiteSpace: 'pre-line' }} className='d-flex text-start border-bottom align-top'>
+                <div><h3 className='align-top my-10'>Code Summary:</h3></div>
 
-              <div className='mb-3 text-center'>
-                {response && response.choices && response.choices[0] && response.choices[0].text && (
-                  <div style={{ whiteSpace: 'pre-line' }}>
-                    <pre>{JSON.stringify(response.choices[0].text.trim(), null, 2).replace(/"/g, '')}</pre>
-                  </div>
-                )}
+                <div className='text-start'>
+                  {response && response.choices && response.choices[0] && response.choices[0].text && (
+                    <div style={{ whiteSpace: 'pre-line' }}>
+                      <pre>{JSON.stringify(response.choices[0].text.trim(), null, 2).replace(/"/g, '')}</pre>
+                    </div>
+                  )}
+                </div>
               </div>
 
 
             </div>
-          </div>
-
-
-          {/* Uncomment the following if you want to display the Java code */}
-          {/* {javaCode && <div>{javaCode}</div>} */}
+                  </div>*/}
         </div>
 
 

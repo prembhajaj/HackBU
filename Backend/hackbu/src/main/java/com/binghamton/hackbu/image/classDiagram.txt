@@ -1,0 +1,15 @@
+@startuml
+class Car {
+    - brand: String
+    - model: String
+    - year: int
+    + Car(brand: String, model: String, year: int)
+    + getBrand(): String
+    + setBrand(brand: String): void
+    + getModel(): String
+    + setModel(model: String): void
+    + getYear(): int
+    + setYear(year: int): void
+}
+@enduml
+

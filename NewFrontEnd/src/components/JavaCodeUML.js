@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import jsonToPlantUML from "json-to-plantuml";
+// import jsonToPlantUML from "json-to-plantuml";
 import * as plantumlEncoder from 'plantuml-encoder';
 
 const JavaCodeUML = () => {
@@ -45,99 +45,113 @@ const JavaCodeUML = () => {
   console.log(response);
 
 
-  useEffect(() => {
-    const generatePlantUml = async () => {
-      // Sample JSON data
-      const sampleJson = {
-        person: {
-          name: "John Doe",
-          age: 30,
-          address: {
-            street: "123 Main St",
-            city: "Anytown",
-            zipCode: "12345",
-          },
-          contacts: [
-            {
-              type: "email",
-              value: "john@example.com",
-            },
-            {
-              type: "phone",
-              value: "+1234567890",
-            },
-          ],
+  // useEffect(() => {
+
+
+  //   // Call the async function
+  //   generatePlantUml();
+  // }, [javaCode]); // Run the effect whenever javaCode changes
+
+  const generatePlantUml = async () => {
+    // Call the backend API to generate PlantUML
+    try {
+      const response = await fetch('http://149.125.138.184:8080/generate-uml', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/text',
         },
-      };
+        // body: JSON.stringify(javaCode),
+        body: javaCode,
+      });
 
-      // Convert JSON to PlantUML
-      try {
-        const generatedPlantUml = await jsonToPlantUML(sampleJson);
-        setPlantUml(generatedPlantUml);
-
-        // Encode PlantUML code to get the SVG URL
-        const encode = plantumlEncoder.encode(generatedPlantUml);
-        const url = `http://www.plantuml.com/plantuml/svg/${encode}`;
-        setPlantUmlSvgUrl(url);
-      } catch (error) {
-        console.error("Error generating PlantUML:", error);
-        setPlantUml("Error generating PlantUML");
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
       }
-    };
 
-    // Call the async function
-    generatePlantUml();
-  }, []); // Empty dependency array to run the effect only once when the component mounts
+      const generatedPlantUml = await response.text();
+
+      setResponse(generatedPlantUml);
+
+      console.log("generatePlantUml", generatePlantUml);
+
+      // Set the generated PlantUML and encode for SVG URL
+      setPlantUml(generatedPlantUml);
+      const encode = plantumlEncoder.encode(generatedPlantUml);
+      const url = `http://www.plantuml.com/plantuml/svg/${encode}`;
+      console.log(url);
+      setPlantUmlSvgUrl(url);
+    } catch (error) {
+      console.error("Error generating PlantUML:", error);
+      setPlantUml("Error generating PlantUML");
+    }
+  };
+
+  console.log(javaCode);
 
 
   const handleInputChange = (event) => {
     setJavaCode(event.target.value);
   };
 
-  const convertToBackendString = () => {
-    // Your backend expects the Java code as a string, so you can use javaCode directly.
-    console.log('Sending to backend:', javaCode);
 
-    // For demonstration purposes, you can make a fetch request to your backend here.
-    // Replace the URL and method with your actual backend API endpoint.
-    // fetch('your-backend-api-endpoint', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify({ javaCode }),
-    // })
-    //   .then(response => response.json())
-    //   .then(data => console.log('Backend response:', data))
-    //   .catch(error => console.error('Error:', error));
-  };
 
   return (
-    <div>
-      <textarea
-        rows="10"
-        cols="80"
-        placeholder="Enter Java code here..."
-        value={javaCode}
-        onChange={handleInputChange}
-      />
-      <br />
-      <button onClick={convertToBackendString}>Send to Backend</button>
-      <br/>
-      {javaCode?<div>{javaCode}</div>:null}
-      {/*<img alt="PlantUML" src={plantUmlSvgUrl} />*/}
 
-      <div>
-      <button onClick={makeApiRequest}>Make API Request</button>
-      {response && (
-        <div>
-          <h2>API Response:</h2>
-          <pre>{JSON.stringify(response, null, 2)}</pre>
+    <div className="container-fluid">
+      {/* Left Side */}
+      <div className="row">
+        {/* Left Half */}
+        <div className="col-sm-6">
+          <textarea
+            className="form-control h-100"
+            rows="30"
+            placeholder="Enter Java code here..."
+            value={javaCode}
+            onChange={handleInputChange}
+          />
+          <div className='p-2 d-flex justify-content-center'>
+            <button className="btn btn-primary" onClick={() => { generatePlantUml(); makeApiRequest(); }}>
+              Refresh
+            </button>
+          </div>
         </div>
-      )}
-    </div>
+        {/* Right Side */}
+        <div className="col-sm-6">
+          {/* Right Half */}
+          <div className="d-flex flex-column justify-content-between h-100">
+            {/* Top Right: PlantUML Image */}
+            <h3>UML Diagram:</h3>
+            <div className="mb-3 text-center">
+
+              {plantUmlSvgUrl ? <img className="img-fluid" alt="" src={plantUmlSvgUrl} /> : null}
+            </div>
+
+            <hr />
+
+            {/* Bottom Right: Text Summarization */}
+            <h3>Code Summary:</h3>
+
+            <div className='mb-3 text-center'>
+              {response && (
+                <div style={{ whiteSpace: 'pre-line' }}>
+                  <pre>{JSON.stringify(response.choices[0].text.trim(), null, 2).replace(/"/g, '')}</pre>
+                </div>
+              )}
+            </div>
+
+          </div>
+        </div>
+
+
+        {/* Uncomment the following if you want to display the Java code */}
+        {/* {javaCode && <div>{javaCode}</div>} */}
+      </div>
+
+
+
     </div>
   );
+
 };
 
 export default JavaCodeUML;

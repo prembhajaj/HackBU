@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import * as plantumlEncoder from 'plantuml-encoder';
 import "../App.css";
 
-
 const JavaCodeUML = () => {
   const [javaCode, setJavaCode] = useState('');
   const [plantUml, setPlantUml] = useState("");
@@ -11,18 +10,26 @@ const JavaCodeUML = () => {
   const [response, setResponse] = useState(null);
 
   const makeApiRequest = async () => {
-    const apiUrl = 'https://api.openai.com/v1/completions';  // Replace with your actual API endpoint
+  
+    const apiUrl = 'https://api.openai.com/v1/chat/completions';  // Replace with your actual API endpoint
+
+    // const apiKey = process.env.OPENAI_API_KEY?.trim();
+    // if (!apiKey) throw new Error("Missing OPENAI_API_KEY");
+    const apiKey = "test"
 
     const headers = {
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer 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',
+      'Authorization': `Bearer ${apiKey}`,
     };
 
     const requestBody = {
-      model: 'gpt-3.5-turbo-instruct',
-      prompt: `${javaCode}+ give me a brief text summarization of this code`,
-      temperature: 0.7,
-      max_tokens: 2500,
+      model: "gpt-5-mini",
+      messages: [
+        { role: "system", content: "You summarize code succinctly and accurately." },
+        { role: "user", content: `Summarize this code in 4–6 lines:\n\n${javaCode}` }
+      ],
+      temperature: 0.3,
+      max_tokens: 400
     };
 
     try {
@@ -57,7 +64,7 @@ const JavaCodeUML = () => {
   const generatePlantUml = async () => {
     // Call the backend API to generate PlantUML
     try {
-      const response = await fetch('http://149.125.138.184:8080/generate-uml', {
+      const response = await fetch('http://localhost:8080/generate-uml', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/text',

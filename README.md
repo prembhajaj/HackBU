@@ -47,7 +47,7 @@ It provides an interactive code editor, automatically generates UML diagrams fro
 
     Navigate to the backend directory and start the Spring Boot application:
     ```
-    cd backend
+    cd Backend/hackbu
     mvn spring-boot:run
     ```
     Ensure the backend is running on the configured port.
@@ -56,7 +56,7 @@ It provides an interactive code editor, automatically generates UML diagrams fro
 
     Navigate to the frontend directory, install dependencies, and start the React application:
     ```
-    cd ../frontend
+    cd ../NewFrontEnd
     npm install
     npm start
     ```

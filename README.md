@@ -3,6 +3,9 @@
 This project is a full-stack application developed during the HackBU hackathon that combines modern web development with AI to enhance the coding experience. 
 It provides an interactive code editor, automatically generates UML diagrams from the written code, and leverages OpenAI's ChatGPT to offer targeted code improvement suggestions.
 
+![alt text](bingUML.png)
+
+
 **Features**
 
 - **Interactive Code Editor:** Write and modify code in a user-friendly interface.
